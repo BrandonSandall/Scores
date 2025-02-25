@@ -25,4 +25,21 @@ app.post('/update', (req, res) => {
     });
 });
 
+app.post('/add', (req, res) => {
+    const { name } = req.body;
+    if (name) {
+        db.get('SELECT name FROM players WHERE name = ?', [name], (err, row) => {
+            if (row) {
+                res.status(400).send('Player already exists');
+            } else {
+                db.run('INSERT INTO players (name, score) VALUES (?, 0)', [name], () => {
+                    res.sendStatus(200);
+                });
+            }
+        });
+    } else {
+        res.status(400).send('Invalid name');
+    }
+});
+
 app.listen(3000, () => console.log('Server running on port 3000'));
