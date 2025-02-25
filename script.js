@@ -2,7 +2,8 @@ async function loadScores() {
     const response = await fetch('/scores');
     const players = await response.json();
     const scoreboard = document.getElementById('scoreboard');
-    scoreboard.innerHTML = '';
+    scoreboard.innerHTML = ''; // Clear the current display
+
     if (players.length === 0) {
         const p = document.createElement('p');
         p.textContent = 'No players yet. Add some players to start.';
@@ -29,8 +30,8 @@ async function addPlayer() {
             body: JSON.stringify({ name })
         });
         if (response.ok) {
-            loadScores();
-            document.getElementById('newPlayerName').value = '';
+            loadScores(); // Refresh the player list
+            document.getElementById('newPlayerName').value = ''; // Clear the input
         } else {
             alert('Player already exists or invalid name.');
         }
@@ -44,7 +45,7 @@ async function removePlayer(name) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name })
         });
-        loadScores();
+        loadScores(); // Refresh the player list
     }
 }
 
@@ -54,7 +55,7 @@ async function updateScore(name, change) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, change })
     });
-    loadScores();
+    loadScores(); // Refresh the player list
 }
 
-window.onload = loadScores;
+window.onload = loadScores; // Load players when the page loads
