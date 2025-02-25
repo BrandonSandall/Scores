@@ -1,6 +1,17 @@
-async function loadScores() {
-    const response = await fetch('/scores');
-    const players = await response.json();
+let players = [];
+
+function loadPlayers() {
+    const stored = localStorage.getItem('players');
+    if (stored) {
+        players = JSON.parse(stored);
+    }
+}
+
+function savePlayers() {
+    localStorage.setItem('players', JSON.stringify(players));
+}
+
+function renderPlayers() {
     const scoreboard = document.getElementById('scoreboard');
     scoreboard.innerHTML = ''; // Clear the current display
 
@@ -12,50 +23,64 @@ async function loadScores() {
         players.forEach(player => {
             const div = document.createElement('div');
             div.className = 'player';
-            div.innerHTML = `${player.name}: ${player.score}
-                <button onclick="updateScore('${player.name}', 1)">+1</button>
-                <button onclick="updateScore('${player.name}', -1)">-1</button>
-                <button onclick="removePlayer('${player.name}')">Delete</button>`;
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = player.name;
+            const scoreSpan = document.createElement('span');
+            scoreSpan.textContent = `: ${player.score}`;
+            const addButton = document.createElement('button');
+            addButton.textContent = '+1';
+            addButton.addEventListener('click', () => updateScore(player.name, 1));
+            const subtractButton = document.createElement('button');
+            subtractButton.textContent = '-1';
+            subtractButton.addEventListener('click', () => updateScore(player.name, -1));
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.addEventListener('click', () => removePlayer(player.name));
+            div.appendChild(nameSpan);
+            div.appendChild(scoreSpan);
+            div.appendChild(addButton);
+            div.appendChild(subtractButton);
+            div.appendChild(deleteButton);
             scoreboard.appendChild(div);
         });
     }
 }
 
-async function addPlayer() {
-    const name = document.getElementById('newPlayerName').value.trim();
-    if (name) {
-        const response = await fetch('/add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name })
-        });
-        if (response.ok) {
-            loadScores(); // Refresh the player list
-            document.getElementById('newPlayerName').value = ''; // Clear the input
-        } else {
-            alert('Player already exists or invalid name.');
-        }
+function addPlayer() {
+    const nameInput = document.getElementById('newPlayerName');
+    const name = nameInput.value.trim();
+    if (name && !players.some(p => p.name === name)) {
+        players.push({ name, score: 0 });
+        savePlayers();
+        renderPlayers();
+        nameInput.value = '';
+    } else if (!name) {
+        alert('Please enter a name.');
+    } else {
+        alert('Player already exists.');
     }
 }
 
-async function removePlayer(name) {
+function removePlayer(name) {
     if (confirm(`Are you sure you want to remove ${name}?`)) {
-        await fetch('/remove', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name })
-        });
-        loadScores(); // Refresh the player list
+        players = players.filter(p => p.name !== name);
+        savePlayers();
+        renderPlayers();
     }
 }
 
-async function updateScore(name, change) {
-    await fetch('/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, change })
-    });
-    loadScores(); // Refresh the player list
+function updateScore(name, change) {
+    const player = players.find(p => p.name === name);
+    if (player) {
+        player.score += change;
+        savePlayers();
+        renderPlayers();
+    }
 }
 
-window.onload = loadScores; // Load players when the page loads
+// Initialize when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    loadPlayers();
+    renderPlayers();
+    document.getElementById('addButton').addEventListener('click', addPlayer);
+});
