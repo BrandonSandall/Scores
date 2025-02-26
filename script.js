@@ -1,4 +1,8 @@
-// Replace this with your Firebase configuration from Step 1
+// Import Firebase app and Realtime Database functions
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+import { getDatabase, ref, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
+
+// Your Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCH5jBxO8wQvaks_EX-jwQRIWNNG42bL_Q",
     authDomain: "game-scores-fun.firebaseapp.com",
@@ -10,22 +14,22 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-const playersRef = database.ref('players');
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const playersRef = ref(database, 'players');
 
 // Add a new player
 document.getElementById('addPlayerForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const name = document.getElementById('newPlayerName').value.trim();
     if (name) {
-        playersRef.push({ name: name, score: 0 });
+        push(playersRef, { name: name, score: 0 });
         document.getElementById('newPlayerName').value = '';
     }
 });
 
 // Update the scoreboard in real-time
-playersRef.on('value', (snapshot) => {
+onValue(playersRef, (snapshot) => {
     const players = snapshot.val();
     const scoreboard = document.getElementById('scoreboard');
     scoreboard.innerHTML = '';
@@ -61,7 +65,7 @@ playersRef.on('value', (snapshot) => {
             // Delete player
             div.querySelector('.delete').addEventListener('click', () => {
                 if (confirm(`Remove ${player.name}?`)) {
-                    playersRef.child(id).remove();
+                    remove(ref(database, 'players/' + id));
                 }
             });
         });
@@ -72,11 +76,12 @@ playersRef.on('value', (snapshot) => {
 
 // Function to update scores
 function updateScore(playerId, change) {
-    const playerRef = playersRef.child(playerId);
-    playerRef.transaction((player) => {
+    const playerRef = ref(database, 'players/' + playerId);
+    onValue(playerRef, (snapshot) => {
+        const player = snapshot.val();
         if (player) {
-            player.score = (player.score || 0) + change;
+            const newScore = (player.score || 0) + change;
+            update(playerRef, { score: newScore });
         }
-        return player;
-    });
+    }, { onlyOnce: true });
 }
