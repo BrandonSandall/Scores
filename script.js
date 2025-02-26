@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
 import { getDatabase, ref, onValue, push, remove, runTransaction } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
 
-// Your Firebase configuration
+// Firebase configuration (hardcoded for ease of use)
 const firebaseConfig = {
     apiKey: "AIzaSyCH5jBxO8wQvaks_EX-jwQRIWNNG42bL_Q",
     authDomain: "game-scores-fun.firebaseapp.com",
@@ -51,6 +51,7 @@ onValue(playersRef, (snapshot) => {
             `;
             scoreboard.appendChild(div);
 
+            // Add custom score
             div.querySelector('.addCustom').addEventListener('click', () => {
                 const customScore = parseInt(div.querySelector('.customScore').value, 10);
                 if (!isNaN(customScore)) {
@@ -58,6 +59,7 @@ onValue(playersRef, (snapshot) => {
                 }
             });
 
+            // Subtract custom score
             div.querySelector('.subtractCustom').addEventListener('click', () => {
                 const customScore = parseInt(div.querySelector('.customScore').value, 10);
                 if (!isNaN(customScore)) {
@@ -65,6 +67,7 @@ onValue(playersRef, (snapshot) => {
                 }
             });
 
+            // Delete player
             div.querySelector('.delete').addEventListener('click', () => {
                 if (confirm(`Remove ${player.name}?`)) {
                     remove(ref(database, 'players/' + player.id));
