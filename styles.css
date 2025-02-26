@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    font-size: 16px;
+}
+
+.player {
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.player-info {
+    margin-bottom: 10px;
+}
+
+.player-controls input, .player-controls button {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.player-controls input {
+    width: 100px;
+}
+
+form {
+    margin: 20px 0;
+}
+
+input[type="text"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+    .player {
+        padding: 15px;
+    }
+    .player-info {
+        font-size: 18px;
+    }
+    .player-controls input, .player-controls button {
+        font-size: 18px;
+        padding: 12px;
+    }
+    input[type="text"] {
+        font-size: 18px;
+    }
+}
