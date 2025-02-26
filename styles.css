@@ -14,18 +14,37 @@ body {
 .player-info {
     margin-bottom: 10px;
     font-size: 18px;
+    line-height: 1.5;
+}
+
+.player-info .delete {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 .player-controls input, .player-controls button {
     display: inline-block;
     margin-right: 10px;
     margin-bottom: 10px;
-    padding: 10px;
     font-size: 16px;
 }
 
 .player-controls input {
     width: 100px;
+    padding: 10px;
+}
+
+.player-controls .addCustom, .player-controls .subtractCustom {
+    width: 40px;
+    text-align: center;
+    padding: 5px 0;
 }
 
 form {
@@ -53,5 +72,13 @@ input[type="text"] {
     }
     input[type="text"] {
         font-size: 18px;
+    }
+    .player-info .delete {
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+    .player-controls .addCustom, .player-controls .subtractCustom {
+        width: 50px;
+        padding: 8px 0;
     }
 }

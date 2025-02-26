@@ -40,13 +40,13 @@ onValue(playersRef, (snapshot) => {
             div.className = 'player';
             div.innerHTML = `
                 <div class="player-info">
+                    <button class="delete">X</button>
                     <span class="name">${player.name}</span>: <span class="score">${player.score}</span>
                 </div>
                 <div class="player-controls">
-                    <input type="number" class="customScore" placeholder="Custom amount">
-                    <button class="addCustom">Add</button>
-                    <button class="subtractCustom">Subtract</button>
-                    <button class="delete">Delete</button>
+                    <input type="number" class="customScore" placeholder="Number">
+                    <button class="addCustom">+</button>
+                    <button class="subtractCustom">-</button>
                 </div>
             `;
             scoreboard.appendChild(div);
