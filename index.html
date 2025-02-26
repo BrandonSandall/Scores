@@ -2,13 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Scores</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        .player { margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        button { margin-left: 5px; padding: 5px 10px; }
-        input[type="number"] { width: 100px; margin-left: 10px; }
-        form { margin: 20px 0; }
+        body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    font-size: 16px; /* Base font size for readability */
+}
+
+.player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.name, .score {
+    font-size: 18px; /* Larger text for player names and scores */
+    margin-bottom: 10px;
+}
+
+.customScore {
+    width: 100%;
+    max-width: 200px;
+    padding: 10px;
+    font-size: 16px; /* Bigger input field text */
+    margin-bottom: 10px;
+}
+
+button {
+    width: 100%;
+    max-width: 200px;
+    padding: 10px;
+    font-size: 16px; /* Bigger buttons */
+    margin-bottom: 10px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+input[type="text"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    font-size: 16px; /* Easier to type on mobile */
+    margin-bottom: 10px;
+}
+
+/* Adjust for smaller screens like your iPhone */
+@media (max-width: 600px) {
+    .player {
+        padding: 15px;
+    }
+    
+    .name, .score {
+        font-size: 20px; /* Even larger text on small screens */
+    }
+    
+    .customScore, button {
+        font-size: 18px; /* Bigger buttons and inputs */
+        padding: 12px;
+    }
+    
+    input[type="text"] {
+        font-size: 18px;
+    }
+}
     </style>
 </head>
 <body>
