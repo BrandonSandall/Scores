@@ -1,86 +1,82 @@
-let players = [];
+// Replace this with your Firebase configuration from Step 1
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    databaseURL: "YOUR_DATABASE_URL",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
 
-function loadPlayers() {
-    const stored = localStorage.getItem('players');
-    if (stored) {
-        players = JSON.parse(stored);
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const playersRef = database.ref('players');
+
+// Add a new player
+document.getElementById('addPlayerForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('newPlayerName').value.trim();
+    if (name) {
+        playersRef.push({ name: name, score: 0 });
+        document.getElementById('newPlayerName').value = '';
     }
-}
+});
 
-function savePlayers() {
-    localStorage.setItem('players', JSON.stringify(players));
-}
-
-function renderPlayers() {
+// Update the scoreboard in real-time
+playersRef.on('value', (snapshot) => {
+    const players = snapshot.val();
     const scoreboard = document.getElementById('scoreboard');
-    scoreboard.innerHTML = ''; // Clear the current display
-
-    if (players.length === 0) {
-        const p = document.createElement('p');
-        p.textContent = 'No players yet. Add some players to start.';
-        scoreboard.appendChild(p);
-    } else {
-        players.forEach(player => {
+    scoreboard.innerHTML = '';
+    if (players) {
+        Object.entries(players).forEach(([id, player]) => {
             const div = document.createElement('div');
             div.className = 'player';
-            const nameSpan = document.createElement('span');
-            nameSpan.textContent = player.name;
-            const scoreSpan = document.createElement('span');
-            scoreSpan.textContent = `: ${player.score}`;
-            const addButton = document.createElement('button');
-            addButton.textContent = '+1';
-            addButton.addEventListener('click', () => updateScore(player.name, 1));
-            const subtractButton = document.createElement('button');
-            subtractButton.textContent = '-1';
-            subtractButton.addEventListener('click', () => updateScore(player.name, -1));
-            const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
-            deleteButton.addEventListener('click', () => removePlayer(player.name));
-            div.appendChild(nameSpan);
-            div.appendChild(scoreSpan);
-            div.appendChild(addButton);
-            div.appendChild(subtractButton);
-            div.appendChild(deleteButton);
+            div.innerHTML = `
+                <span class="name">${player.name}</span>: <span class="score">${player.score}</span>
+                <input type="number" class="customScore" placeholder="Custom amount">
+                <button class="addCustom">Add</button>
+                <button class="subtractCustom">Subtract</button>
+                <button class="delete">Delete</button>
+            `;
             scoreboard.appendChild(div);
+
+            // Add custom score
+            div.querySelector('.addCustom').addEventListener('click', () => {
+                const customScore = parseInt(div.querySelector('.customScore').value, 10);
+                if (!isNaN(customScore)) {
+                    updateScore(id, customScore);
+                }
+            });
+
+            // Subtract custom score
+            div.querySelector('.subtractCustom').addEventListener('click', () => {
+                const customScore = parseInt(div.querySelector('.customScore').value, 10);
+                if (!isNaN(customScore)) {
+                    updateScore(id, -customScore);
+                }
+            });
+
+            // Delete player
+            div.querySelector('.delete').addEventListener('click', () => {
+                if (confirm(`Remove ${player.name}?`)) {
+                    playersRef.child(id).remove();
+                }
+            });
         });
-    }
-}
-
-function addPlayer() {
-    const nameInput = document.getElementById('newPlayerName');
-    const name = nameInput.value.trim();
-    if (name && !players.some(p => p.name === name)) {
-        players.push({ name, score: 0 });
-        savePlayers();
-        renderPlayers();
-        nameInput.value = '';
-    } else if (!name) {
-        alert('Please enter a name.');
     } else {
-        alert('Player already exists.');
+        scoreboard.innerHTML = '<p>No players yet.</p>';
     }
-}
-
-function removePlayer(name) {
-    if (confirm(`Are you sure you want to remove ${name}?`)) {
-        players = players.filter(p => p.name !== name);
-        savePlayers();
-        renderPlayers();
-    }
-}
-
-function updateScore(name, change) {
-    const player = players.find(p => p.name === name);
-    if (player) {
-        player.score += change;
-        savePlayers();
-        renderPlayers();
-    }
-}
-
-// Initialize when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    loadPlayers();
-    renderPlayers();
-    document.getElementById('addButton').addEventListener('click', addPlayer);
 });
+
+// Function to update scores
+function updateScore(playerId, change) {
+    const playerRef = playersRef.child(playerId);
+    playerRef.transaction((player) => {
+        if (player) {
+            player.score = (player.score || 0) + change;
+        }
+        return player;
+    });
+}

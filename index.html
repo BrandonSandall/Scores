@@ -4,17 +4,25 @@
     <meta charset="UTF-8">
     <title>Family Game Scores</title>
     <style>
-        .player { margin: 10px; padding: 10px; border: 1px solid #ccc; }
-        button { margin-left: 5px; }
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .player { margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        button { margin-left: 5px; padding: 5px 10px; }
+        input[type="number"] { width: 100px; margin-left: 10px; }
+        form { margin: 20px 0; }
     </style>
 </head>
 <body>
     <h1>Game Scores</h1>
-    <div>
-        <input type="text" id="newPlayerName" placeholder="Enter player name">
-        <button id="addButton">Add Player</button>
-    </div>
+    <form id="addPlayerForm">
+        <input type="text" id="newPlayerName" placeholder="Player name" required>
+        <button type="submit">Add Player</button>
+    </form>
     <div id="scoreboard"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <!-- Your script -->
     <script src="script.js"></script>
 </body>
 </html>
