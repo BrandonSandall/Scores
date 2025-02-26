@@ -1,12 +1,12 @@
 // Replace this with your Firebase configuration from Step 1
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    databaseURL: "YOUR_DATABASE_URL",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyCH5jBxO8wQvaks_EX-jwQRIWNNG42bL_Q",
+    authDomain: "game-scores-fun.firebaseapp.com",
+    databaseURL: "https://game-scores-fun-default-rtdb.firebaseio.com",
+    projectId: "game-scores-fun",
+    storageBucket: "game-scores-fun.firebasestorage.app",
+    messagingSenderId: "61070582415",
+    appId: "1:61070582415:web:909e32bdff09a1a30346fa"
 };
 
 // Initialize Firebase
