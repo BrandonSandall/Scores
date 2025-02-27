@@ -14,7 +14,6 @@ body {
 .player-info {
     margin-bottom: 10px;
     font-size: 18px;
-    line-height: 1.5;
 }
 
 .player-info .delete {
@@ -32,7 +31,6 @@ body {
 .player-controls input, .player-controls button {
     display: inline-block;
     margin-right: 10px;
-    margin-bottom: 10px;
     font-size: 16px;
 }
 
