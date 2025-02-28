@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
-import { getDatabase, ref, onValue, push, remove, runTransaction } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
+import { getDatabase, ref, onValue, push, remove, runTransaction, get, update } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
 
-// Firebase configuration (hardcoded for ease of use)
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCH5jBxO8wQvaks_EX-jwQRIWNNG42bL_Q",
     authDomain: "game-scores-fun.firebaseapp.com",
@@ -44,7 +44,7 @@ onValue(playersRef, (snapshot) => {
                     <span class="name">${player.name}</span>: <span class="score">${player.score}</span>
                 </div>
                 <div class="player-controls">
-                    <input type="number" class="customScore" placeholder="Number">
+                    <input type="number" class="customScore" placeholder="Custom amount">
                     <button class="addCustom">+</button>
                     <button class="subtractCustom">-</button>
                 </div>
@@ -88,4 +88,23 @@ function updateScore(playerId, change) {
         }
         return player;
     });
+}
+
+// Reset all scores
+document.getElementById('resetAllButton').addEventListener('click', async () => {
+    if (confirm('Are you sure you want to reset all scores to 0?')) {
+        await resetAllScores();
+    }
+});
+
+async function resetAllScores() {
+    const snapshot = await get(playersRef);
+    const playersData = snapshot.val();
+    if (playersData) {
+        const updates = {};
+        Object.keys(playersData).forEach((key) => {
+            updates[key + '/score'] = 0;
+        });
+        await update(ref(database, 'players'), updates);
+    }
 }
