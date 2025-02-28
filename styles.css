@@ -57,21 +57,6 @@ input[type="text"] {
     margin-bottom: 10px;
 }
 
-#resetAllButton {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#resetAllButton:hover {
-    background-color: #cc0000;
-}
-
 @media (max-width: 600px) {
     .player {
         padding: 15px;
@@ -93,9 +78,5 @@ input[type="text"] {
     .player-controls .addCustom, .player-controls .subtractCustom {
         width: 50px;
         padding: 8px 0;
-    }
-    #resetAllButton {
-        font-size: 18px;
-        padding: 12px 24px;
     }
 }

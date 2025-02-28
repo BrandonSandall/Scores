@@ -44,7 +44,7 @@ onValue(playersRef, (snapshot) => {
                     <span class="name">${player.name}</span>: <span class="score">${player.score}</span>
                 </div>
                 <div class="player-controls">
-                    <input type="number" class="customScore" placeholder="Custom amount">
+                    <input type="number" class="customScore" placeholder="Score">
                     <button class="addCustom">+</button>
                     <button class="subtractCustom">-</button>
                 </div>
